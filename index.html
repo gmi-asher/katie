@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Katie ❤️</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const FloatingHeart = ({ delay, duration, startX }) => {
+            const [isHovered, setIsHovered] = useState(false);
+
+            return (
+                <div
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    style={{
+                        position: 'absolute',
+                        left: `${startX}%`,
+                        animation: `float ${duration}s ease-in-out ${delay}s infinite`,
+                        fontSize: isHovered ? '3rem' : '2rem',
+                        transition: 'all 0.3s ease',
+                        cursor: 'pointer',
+                        transform: isHovered ? 'rotate(360deg) scale(1.5)' : 'rotate(0deg) scale(1)',
+                        filter: isHovered ? 'drop-shadow(0 0 10px #ff69b4)' : 'none',
+                        zIndex: isHovered ? 1000 : 1,
+                    }}
+                >
+                    {isHovered ? '💕' : '❤️'}
+                </div>
+            );
+        };
+
+        const Card = () => {
+            const [hearts, setHearts] = useState([]);
+            const [sparkle, setSparkle] = useState(false);
+
+            useEffect(() => {
+                const heartArray = Array.from({ length: 15 }, (_, i) => ({
+                    id: i,
+                    delay: Math.random() * 5,
+                    duration: 8 + Math.random() * 4,
+                    startX: Math.random() * 100,
+                }));
+                setHearts(heartArray);
+            }, []);
+
+            const handleCardClick = () => {
+                setSparkle(true);
+                setTimeout(() => setSparkle(false), 600);
+            };
+
+            return (
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minHeight: '100vh',
+                    position: 'relative',
+                }}>
+                    {hearts.map(heart => (
+                        <FloatingHeart
+                            key={heart.id}
+                            delay={heart.delay}
+                            duration={heart.duration}
+                            startX={heart.startX}
+                        />
+                    ))}
+
+                    <div
+                        onClick={handleCardClick}
+                        style={{
+                            background: 'white',
+                            borderRadius: '20px',
+                            padding: '60px 80px',
+                            boxShadow: '0 20px 60px rgba(255, 105, 180, 0.3)',
+                            textAlign: 'center',
+                            position: 'relative',
+                            zIndex: 10,
+                            cursor: 'pointer',
+                            transition: 'transform 0.3s ease',
+                            transform: sparkle ? 'scale(1.05)' : 'scale(1)',
+                            border: '3px solid #ffb6d9',
+                        }}
+                    >
+                        <div style={{
+                            fontSize: '3.5rem',
+                            marginBottom: '20px',
+                            animation: 'pulse 2s ease-in-out infinite',
+                        }}>
+                            💖
+                        </div>
+
+                        <h1 style={{
+                            color: '#d63384',
+                            fontSize: '3rem',
+                            margin: '20px 0',
+                            fontWeight: 'bold',
+                        }}>
+                            Katie
+                        </h1>
+
+                        <p style={{
+                            color: '#ff69b4',
+                            fontSize: '2rem',
+                            margin: '20px 0',
+                            fontStyle: 'italic',
+                        }}>
+                            I Love You
+                        </p>
+
+                        <div style={{
+                            fontSize: '2.5rem',
+                            marginTop: '20px',
+                            animation: 'pulse 2s ease-in-out infinite',
+                            animationDelay: '1s',
+                        }}>
+                            💝
+                        </div>
+                    </div>
+
+                    <style>{`
+                        @keyframes float {
+                            0%, 100% {
+                                transform: translateY(100vh) rotate(0deg);
+                                opacity: 0;
+                            }
+                            10% {
+                                opacity: 1;
+                            }
+                            90% {
+                                opacity: 1;
+                            }
+                            100% {
+                                transform: translateY(-100px) rotate(180deg);
+                                opacity: 0;
+                            }
+                        }
+
+                        @keyframes pulse {
+                            0%, 100% {
+                                transform: scale(1);
+                            }
+                            50% {
+                                transform: scale(1.1);
+                            }
+                        }
+                    `}</style>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Card />);
+    </script>
+</body>
+</html>
