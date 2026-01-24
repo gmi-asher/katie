@@ -1,0 +1,6 @@
+# Ignore everything in parent directories
+../../../*
+
+# But include files in this directory
+!katie-card.html
+!.gitignore
